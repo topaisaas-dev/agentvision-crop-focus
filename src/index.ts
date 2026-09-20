@@ -339,7 +339,7 @@ app.get("/", (c) => {
     <div class="links-bar">
       <a href="/openapi.json" target="_blank">📄 OpenAPI 3.0.3 Spec</a>
       <a href="/v1/health" target="_blank">🩺 Health Status</a>
-      <a href="https://rapidapi.com/user/topaisaasdev" target="_blank">⚡ RapidAPI Marketplace</a>
+      <a href="https://rapidapi.com/topaisaasdev/api/agentvision-crop-focus-api/pricing" target="_blank">⚡ RapidAPI Marketplace</a>
     </div>
   </div>
 
