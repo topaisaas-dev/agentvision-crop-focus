@@ -1,0 +1,171 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "AgentVision Crop & Focus API",
+    "description": "Surgical headless crop and focus API for multimodal AI models (GPT-4o, Claude 3.5 Sonnet, Gemini 1.5 Flash). Reduces vision token consumption and cuts API costs by 60% to 85%.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "TopAI SaaS Dev",
+      "email": "top.ai.saas@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://agentvision-crop-focus.topaisaas.workers.dev",
+      "description": "Cloudflare Workers Global Edge Production"
+    }
+  ],
+  "paths": {
+    "/v1/vision/crop": {
+      "post": {
+        "summary": "Surgical Headless Image Crop",
+        "description": "Calculates precise bounding boxes, crop geometry, and multimodal token reduction for target image regions (hero, pricing table, form, navbar).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "original_width": {
+                    "type": "integer",
+                    "example": 1920
+                  },
+                  "original_height": {
+                    "type": "integer",
+                    "example": 1080
+                  },
+                  "preset": {
+                    "type": "string",
+                    "enum": [
+                      "hero",
+                      "main_content",
+                      "pricing_table",
+                      "checkout_form",
+                      "navbar",
+                      "footer"
+                    ],
+                    "example": "pricing_table"
+                  },
+                  "padding_px": {
+                    "type": "integer",
+                    "example": 20
+                  },
+                  "target_format": {
+                    "type": "string",
+                    "enum": [
+                      "coordinates_only",
+                      "svg_clip"
+                    ],
+                    "default": "coordinates_only"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cropped bounding box and token savings returned"
+          }
+        }
+      }
+    },
+    "/v1/vision/token-calc": {
+      "post": {
+        "summary": "Multimodal Vision Token Calculator",
+        "description": "Accurately calculates OpenAI 512x512 tile grid tokens, Claude 3.5 Sonnet tokens, and Gemini token costs for any arbitrary resolution.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "width",
+                  "height"
+                ],
+                "properties": {
+                  "width": {
+                    "type": "integer",
+                    "example": 1920
+                  },
+                  "height": {
+                    "type": "integer",
+                    "example": 1080
+                  },
+                  "detail": {
+                    "type": "string",
+                    "enum": [
+                      "low",
+                      "high"
+                    ],
+                    "default": "high"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Calculated token budget and costs"
+          }
+        }
+      }
+    },
+    "/v1/vision/focus-selector": {
+      "post": {
+        "summary": "DOM Selector Bounding Box Estimator",
+        "description": "Resolves CSS selectors into crop coordinates and generates automation code snippets for Playwright and Puppeteer.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "selector"
+                ],
+                "properties": {
+                  "selector": {
+                    "type": "string",
+                    "example": "#pricing-table"
+                  },
+                  "viewport": {
+                    "type": "object",
+                    "properties": {
+                      "width": {
+                        "type": "integer",
+                        "example": 1920
+                      },
+                      "height": {
+                        "type": "integer",
+                        "example": 1080
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Coordinates and code snippets returned"
+          }
+        }
+      }
+    },
+    "/v1/health": {
+      "get": {
+        "summary": "Healthcheck & Capability Matrix",
+        "responses": {
+          "200": {
+            "description": "Service is online"
+          }
+        }
+      }
+    }
+  }
+}
